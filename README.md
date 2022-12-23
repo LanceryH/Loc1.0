@@ -25,7 +25,7 @@
 
 <img src="https://user-images.githubusercontent.com/108919405/209365586-619e9d91-dfa9-47c5-89e5-ab2137759ef1.png" width="400" height="300"/>
 
-6. Repeat the drawing process as many as the "nb Obj" (number of object) you chose
+6. Repeat the drawing process as many as the "nb Obj" (number of object) you chose is
 
 7. Then Click "Calculer" 
 
