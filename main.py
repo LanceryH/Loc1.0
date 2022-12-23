@@ -54,6 +54,20 @@ def Rk2(y,t0,tf,N,nb_corps,M):
             Y[j*3:(j+1)*3,i]=y[j*3:(j+1)*3,0]
     return(Y)  
 
+def Verlet(y,t0,tf,N,nb_corps,M):
+    h=(tf-t0)/N
+    t=t0
+    Y=np.zeros((3*nb_corps,N))
+    for i in range(0,N) : 
+        k1=h*f(t,y,M)
+        k2=h*f(t+h, y+k1,M)
+        y=y+(k1+k2)/2
+        t+=h    
+        for j in range(0,nb_corps) :
+            Y[j*3:(j+1)*3,i]=y[j*3:(j+1)*3,0]
+    return(Y)  
+
+
 def ploting():
     
     Valuex=[]
@@ -79,6 +93,8 @@ def ploting():
         
         newWindow = tkinter.Toplevel(root)
         newWindow.title("New Window")
+        newWindow.resizable(width=False,height=False)
+
         F9 = tkinter.LabelFrame(newWindow, text = 'OBJ.1',labelanchor="n",padx =20)
         S1 = tkinter.Scale(newWindow, from_=0, to=np.size(Y[0,:]), orient="horizontal",length=300,command=get_value)
         canvas = FigureCanvasTkAgg(fig, master=F9)  # A tk.DrawingArea.
@@ -95,50 +111,43 @@ def ploting():
             C1.focus_set()
             x=event.x
             y=event.y
-            #if np.size(Valuex
-            C1.create_rectangle(x,y,x+4,y+4,fill="red")
+            if (np.size(Valuex)%2==0):
+                C1.create_rectangle(x,y,x+4,y+4,fill="red")
+                if (showvalue==0):
+                    C1.create_text(x,y-8,text="{},{}".format(x,400-y))
+            else:
+                C1.create_rectangle(x,y,x+4,y+4,fill="blue")
+                C1.create_line(x,y,Valuex[-1],-(Valuey[-1]-400),fill="blue",width=1)
+                h=(int(E2.get())-0)/int(E1.get())
+                v=np.round((((x-Valuex[-1])**2+(400-y-Valuey[-1])**2)**0.5)*h,2)
+                if (showvalue==0):
+                    C1.create_text(x,y-8,text="{},{}".format(x,400-y))
             Valuex.append(x)
             Valuey.append(400-y)
         def valider():
             statecheck1=varRK4.get()
             statecheck2=varRK2.get()
             if (np.size(Valuex)>1):
-                L1.config(text = 'x = {}'.format(Valuex[0]))
-                L2.config(text = 'y = {}'.format(Valuey[0]))
                 Vx1=Valuex[1]-Valuex[0]
-                L4.config(text = 'Vx = {}'.format(Vx1))
                 Vy1=Valuey[1]-Valuey[0]
-                L5.config(text = 'Vy = {}'.format(Vy1))
                 Vit=np.array([[Vx1,Vy1,0]])
                 Pos=np.array([[Valuex[0],Valuey[0],0]])
             if (np.size(Valuex)>3):
-                L7.config(text = 'x = {}'.format(Valuex[2]))
-                L8.config(text = 'y = {}'.format(Valuey[2]))
                 Vx2=Valuex[3]-Valuex[2]
-                L10.config(text = 'Vx = {}'.format(Vx2))
                 Vy2=Valuey[3]-Valuey[2]
-                L11.config(text = 'Vy = {}'.format(Vy2))
                 Vit=np.vstack((Vit,np.array([[Vx2,Vy2,0]])))
                 Pos=np.vstack((Pos,np.array([[Valuex[2],Valuey[2],0]])))
             if (np.size(Valuex)>5):
-                L13.config(text = 'x = {}'.format(Valuex[4]))
-                L14.config(text = 'y = {}'.format(Valuey[4]))
                 Vx3=Valuex[5]-Valuex[4]
-                L16.config(text = 'Vx = {}'.format(Vx3))
                 Vy3=Valuey[5]-Valuey[4]
-                L17.config(text = 'Vy = {}'.format(Vy3))
                 Vit=np.vstack((Vit,np.array([[Vx3,Vy3,0]])))
                 Pos=np.vstack((Pos,np.array([[Valuex[4],Valuey[4],0]])))
-            if (np.size(Valuex)>7):
-                L19.config(text = 'x = {}'.format(Valuex[6]))
-                L20.config(text = 'y = {}'.format(Valuey[6]))                
+            if (np.size(Valuex)>7):        
                 Vx4=Valuex[7]-Valuex[6]
-                L22.config(text = 'Vx = {}'.format(Vx4))
                 Vy4=Valuey[7]-Valuey[6]
-                L23.config(text = 'Vy = {}'.format(Vy4))
                 Vit=np.vstack((Vit,np.array([[Vx4,Vy4,0]])))
                 Pos=np.vstack((Pos,np.array([[Valuex[6],Valuey[6],0]])))
-                
+            global y    
             y=np.vstack((Pos,Vit)).reshape(-1,1)
             print(Pos)
             print(Vit)
@@ -164,40 +173,13 @@ def ploting():
             print("done")
         newWindow2 = tkinter.Toplevel(root)
         newWindow2.title("New Window2")
-        #root.geometry("415x500")
         
+        newWindow2.resizable(width=False,height=False)
         
-        F1 = tkinter.LabelFrame(newWindow2, text = 'OBJ.1',labelanchor="n",padx =20)
-        L1 = tkinter.Label(F1, text = 'x = {}'.format(0))
-        L2 = tkinter.Label(F1, text = 'y = {}'.format(0))
-        L3 = tkinter.Label(F1, text = 'z = {}'.format(0))
-        L4 = tkinter.Label(F1, text = 'Vx = {}'.format(0))
-        L5 = tkinter.Label(F1, text = 'Vy = {}'.format(0))
-        L6 = tkinter.Label(F1, text = 'Vz = {}'.format(0))
-        
-        F2 = tkinter.LabelFrame(newWindow2, text = 'OBJ.2',labelanchor="n",padx =20)
-        L7 = tkinter.Label(F2, text = 'x = {}'.format(0))
-        L8 = tkinter.Label(F2, text = 'y = {}'.format(0))
-        L9 = tkinter.Label(F2, text = 'z = {}'.format(0))
-        L10 = tkinter.Label(F2, text = 'Vx = {}'.format(0))
-        L11 = tkinter.Label(F2, text = 'Vy = {}'.format(0))
-        L12 = tkinter.Label(F2, text = 'Vz = {}'.format(0))
-        
-        F4 = tkinter.LabelFrame(newWindow2, text = 'OBJ.3',labelanchor="n",padx =20)
-        L13 = tkinter.Label(F4, text = 'x = {}'.format(0))
-        L14 = tkinter.Label(F4, text = 'y = {}'.format(0))
-        L15 = tkinter.Label(F4, text = 'z = {}'.format(0))
-        L16 = tkinter.Label(F4, text = 'Vx = {}'.format(0))
-        L17 = tkinter.Label(F4, text = 'Vy = {}'.format(0))
-        L18 = tkinter.Label(F4, text = 'Vz = {}'.format(0))
-        
-        F5 = tkinter.LabelFrame(newWindow2, text = 'OBJ.4',labelanchor="n",padx =20)
-        L19 = tkinter.Label(F5, text = 'x = {}'.format(0))
-        L20 = tkinter.Label(F5, text = 'y = {}'.format(0))
-        L21 = tkinter.Label(F5, text = 'z = {}'.format(0))
-        L22 = tkinter.Label(F5, text = 'Vx = {}'.format(0))
-        L23 = tkinter.Label(F5, text = 'Vy = {}'.format(0))
-        L24 = tkinter.Label(F5, text = 'Vz = {}'.format(0))
+        def reset():
+            newWindow2.destroy()
+            openNewWindow2()
+            return
         
         F6 = tkinter.LabelFrame(newWindow2, text = 'Simulation',labelanchor="n",padx =20,pady =8.5)
         E1 = tkinter.Entry(F6)
@@ -214,57 +196,30 @@ def ploting():
         L28 = tkinter.Label(F6, text = 'masses')
   
         F3 = tkinter.LabelFrame(newWindow2,padx =10,pady=10)
-        B1 = tkinter.Button(newWindow2,text='Caluler',command=valider)
-        B2 = tkinter.Button(newWindow2,text='Afficher',command=openNewWindow)
+        F4 = tkinter.LabelFrame(newWindow2,padx =10,pady=10)
+        B1 = tkinter.Button(F4,text='Caluler',command=valider)
+        B2 = tkinter.Button(F4,text='Afficher',command=openNewWindow)
+        B3 = tkinter.Button(F4,text='Reset',command=reset)
         C1 = tkinter.Canvas(F3,width=500,height=400,background="white")
         C1.bind("<Button-1>",actionclicsouris)
 
-        L1.pack()
-        L2.pack()
-        L3.pack()
-        L4.pack()
-        L5.pack()
-        L6.pack()
-        F1.grid(row=1, column=0)
+       
         
-        L7.pack()
-        L8.pack()
-        L9.pack()
-        L10.pack()
-        L11.pack()
-        L12.pack()
-        F2.grid(row=1, column=1)
-        
-        L13.pack()
-        L14.pack()
-        L15.pack()
-        L16.pack()
-        L17.pack()
-        L18.pack()
-        F4.grid(row=1, column=2)
-        
-        L19.pack()
-        L20.pack()
-        L21.pack()
-        L22.pack()
-        L23.pack()
-        L24.pack()
-        F5.grid(row=1, column=3)
-        
-        L25.grid(row=1, column=0)
-        L26.grid(row=2, column=0)
-        L27.grid(row=3, column=0)
-        L28.grid(row=4, column=0)
-        E1.grid(row=1, column=1)
-        E2.grid(row=2, column=1)
-        E3.grid(row=3, column=1)
-        E4.grid(row=4, column=1)
-        F6.grid(row=1, column=4,columnspan=2)
+        L25.grid(row=0, column=0)
+        L26.grid(row=1, column=0)
+        L27.grid(row=2, column=0)
+        L28.grid(row=3, column=0)
+        E1.grid(row=0, column=1)
+        E2.grid(row=1, column=1)
+        E3.grid(row=2, column=1)
+        E4.grid(row=3, column=1)
+        F6.grid(row=0, column=1,columnspan=3)
         
         C1.pack()
-        B1.grid(row=0, column=1)
-        B2.grid(row=0, column=2)
-
+        B1.grid(row=0, column=0)
+        B2.grid(row=1, column=0)
+        B3.grid(row=2, column=0)
+        F4.grid(row=0, column=0)        
         F3.grid(row=2, column=0,columnspan=6)        
         varRK4 = tkinter.IntVar()
         varRK2 = tkinter.IntVar()
@@ -273,7 +228,17 @@ def ploting():
         CB2= tkinter.Checkbutton(F6,text="rk2", variable=varRK2)
         CB2.grid(row=5, column=1)
         
+        def showvalue():
+            for i in range(len(Valuex)):
+                C1.create_text(Valuex[i],-(Valuey[i]-400)-8,text="{},{}".format(Valuex[i],-(Valuey[i]-400)))
         
+        
+        B4 = tkinter.Button(F4,text='Show value',command=showvalue)
+        B4.grid(row=3, column=0)
+        #h=(int(E2.get())-0)/int(E1.get())
+        #v=np.round((((Valuex+(Valuex[-1]-400))**2+(400-y-Valuey[-1])**2)**0.5)*h,2)
+                    
+       
     def openNewWindowError():
         openNewWindowError = tkinter.Toplevel(root)
         openNewWindowError.title("Error")
@@ -378,6 +343,7 @@ def ploting():
             root.destroy()
     root.protocol("WM_DELETE_WINDOW", quit_me)
     root.wm_title("Embedding in Tk")
+    root.resizable(width=False,height=False)
     #root.geometry("415x500")
     def pickedfc(event):
         global valgg
@@ -388,22 +354,18 @@ def ploting():
             B5.configure(command=openNewWindow3)
 
     F1 = tkinter.LabelFrame(root, text = 'choose',labelanchor="n",padx =10,pady =10)
-    L2 = tkinter.Label(root,text="Create by HUGO LANCERY")
+    L2 = tkinter.Label(root,text="N trajectory model",padx =10,pady =10)
     L1 = tkinter.Listbox(F1,height=2)
-    L3 = tkinter.Listbox(F1,height=2)
     L1.bind('<<ListboxSelect>>',pickedfc)
     B5 = tkinter.Button(root,text='Continue')  
     L1.insert(1,"SandBox")
     L1.insert(2,"RawInput")
-    L3.insert(1,"Rk2")
-    L3.insert(2,"Rk4")
     F1.grid(row=1, column=0)
     L2.grid(row=0, column=0)
     L1.grid(row=0, column=0)
-    L3.grid(row=0, column=1)
     B5.grid(row=2, column=0,columnspan=2,padx =10,pady =10)
     tkinter.mainloop()
 
     return
-ploting()
 
+ploting()
