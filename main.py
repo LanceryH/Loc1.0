@@ -125,33 +125,21 @@ def ploting():
             Valuex.append(x)
             Valuey.append(400-y)
         def valider():
+            Vit=np.array([[0,0,0]])
+            Pos=np.array([[0,0,0]])
             statecheck1=varRK4.get()
             statecheck2=varRK2.get()
-            if (np.size(Valuex)>1):
-                Vx1=Valuex[1]-Valuex[0]
-                Vy1=Valuey[1]-Valuey[0]
-                Vit=np.array([[Vx1,Vy1,0]])
-                Pos=np.array([[Valuex[0],Valuey[0],0]])
-            if (np.size(Valuex)>3):
-                Vx2=Valuex[3]-Valuex[2]
-                Vy2=Valuey[3]-Valuey[2]
-                Vit=np.vstack((Vit,np.array([[Vx2,Vy2,0]])))
-                Pos=np.vstack((Pos,np.array([[Valuex[2],Valuey[2],0]])))
-            if (np.size(Valuex)>5):
-                Vx3=Valuex[5]-Valuex[4]
-                Vy3=Valuey[5]-Valuey[4]
-                Vit=np.vstack((Vit,np.array([[Vx3,Vy3,0]])))
-                Pos=np.vstack((Pos,np.array([[Valuex[4],Valuey[4],0]])))
-            if (np.size(Valuex)>7):        
-                Vx4=Valuex[7]-Valuex[6]
-                Vy4=Valuey[7]-Valuey[6]
-                Vit=np.vstack((Vit,np.array([[Vx4,Vy4,0]])))
-                Pos=np.vstack((Pos,np.array([[Valuex[6],Valuey[6],0]])))
-            global y    
-            y=np.vstack((Pos,Vit)).reshape(-1,1)
-            print(Pos)
+            nb_corps=int(E3.get())
+            for i in range(nb_corps): 
+                Vx=Valuex[-1-(i*2+1)]-Valuex[-1-(i*2)]
+                Vy=Valuey[-1-(i*2+1)]-Valuey[-1-(i*2)]
+                Vit=np.vstack((Vit,np.array([[Vx,Vy,0]])))
+                Pos=np.vstack((Pos,np.array([[Valuex[-1-(i*2)],Valuey[-1-(i*2)],0]])))
             print(Vit)
-            print(y)
+            Vit=Vit[1:,:]        
+            Pos=Pos[1:,:]    
+            print(Vit) 
+            y=np.vstack((Pos,Vit)).reshape(-1,1)
             N=int(E1.get())
             tf=int(E2.get())
             nb_corps=int(E3.get())
