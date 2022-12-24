@@ -78,19 +78,24 @@ def ploting():
         def get_value(val):
             fig.clear()
             for j in range(0,int(np.size(Y[:,0])/3)) : 
+
                 i=int(val)
                 ##plt.scatter(Y[j*3,i], Y[j*3+1,i], c=dico[j])
                 plt.plot(Y[j*3,:i], Y[j*3+1,:i],c=dico[j],linewidth='0.75')
                 canvas.draw()
+                plt.xlim([0,400])
+                plt.ylim([0,400])
                 #print(val)
                 
-        fig = plt.figure()      
+        fig = plt.figure()     
+         
         #ax = plt.axes(projection='3d')
         dico={0:"y",1:"b",2:"r",3:"c",4:"m",5:"g"}
         #plt.axis('off')
         for j in range(0,int(np.size(Y[:,0])/3)): 
             plt.plot(Y[j*3,:], Y[j*3+1,:],c=dico[j],linewidth='0.75')
-        
+        plt.xlim([0,400])
+        plt.ylim([0,400])
         newWindow = tkinter.Toplevel(root)
         newWindow.title("New Window")
         newWindow.resizable(width=False,height=False)
@@ -118,8 +123,6 @@ def ploting():
             else:
                 C1.create_rectangle(x,y,x+4,y+4,fill="blue")
                 C1.create_line(x,y,Valuex[-1],-(Valuey[-1]-400),fill="blue",width=1)
-                h=(int(E2.get())-0)/int(E1.get())
-                v=np.round((((x-Valuex[-1])**2+(400-y-Valuey[-1])**2)**0.5)*h,2)
                 if (showvalue==0):
                     C1.create_text(x,y-8,text="{},{}".format(x,400-y))
             Valuex.append(x)
@@ -130,15 +133,14 @@ def ploting():
             statecheck1=varRK4.get()
             statecheck2=varRK2.get()
             nb_corps=int(E3.get())
+        
             for i in range(nb_corps): 
-                Vx=Valuex[-1-(i*2+1)]-Valuex[-1-(i*2)]
-                Vy=Valuey[-1-(i*2+1)]-Valuey[-1-(i*2)]
-                Vit=np.vstack((Vit,np.array([[Vx,Vy,0]])))
-                Pos=np.vstack((Pos,np.array([[Valuex[-1-(i*2)],Valuey[-1-(i*2)],0]])))
-            print(Vit)
+                    Vx=-Valuex[-(i*2+1)-1]+Valuex[-(i*2)-1]
+                    Vy=-Valuey[-(i*2+1)-1]+Valuey[-(i*2)-1]
+                    Vit=np.vstack((Vit,np.array([[Vx,Vy,0]])))
+                    Pos=np.vstack((Pos,np.array([[Valuex[-(i*2+1)-1],Valuey[-(i*2+1)-1],0]])))
             Vit=Vit[1:,:]        
-            Pos=Pos[1:,:]    
-            print(Vit) 
+            Pos=Pos[1:,:]  
             y=np.vstack((Pos,Vit)).reshape(-1,1)
             N=int(E1.get())
             tf=int(E2.get())
