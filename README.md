@@ -34,3 +34,8 @@
 9. Don't forget to use the scale widget i put under the figure to see the interaction
 
 ==============================================
+
+EXEMPLE
+
+<img src="https://user-images.githubusercontent.com/108919405/209424973-10d65b10-23b5-47c3-a3e2-375603f6fd05.png" width="400" height="400"/>
+<img src="https://user-images.githubusercontent.com/108919405/209424991-74670d87-9937-46cf-8b49-4ada8cfd2990.png" width="400" height="400"/>
