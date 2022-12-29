@@ -56,11 +56,13 @@ def adaptive_rkf45(y, t0, tf, N, nb_corps, M):
             h=h*(ErreurAdmis/ErreurActuel)**0.2
         if (ErreurAdmis>ErreurActuel and ErreurActuel>0.0):
             h=h*(ErreurAdmis/ErreurActuel)**0.25
+        if (h>(tf-t0)/N):
+            h=(tf-t0)/N     
         for j in range(0,nb_corps):
             Y[j*3:(j+1)*3,i]=yb[j*3:(j+1)*3,0] 
-        y=yb        
+        y=yb    
+        print("etape:{} et pas:{}".format(i,h))    
     return Y
-
 
 
 def Rk2(y,t0,tf,N,nb_corps,M):
