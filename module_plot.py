@@ -17,7 +17,7 @@ def ploting():
             for j in range(0,int(np.size(Y[:,0])/3)) : 
 
                 i=int(val)
-                plt.plot(Y[j*3,:i], Y[j*3+1,:i],c=dico[j],linewidth='0.75')
+                plt.plot(Y[j*3,:i], Y[j*3+1,:i],linewidth='0.75')
                 canvas.draw()
                 plt.xlim([0,400])
                 plt.ylim([0,400])
@@ -25,10 +25,9 @@ def ploting():
                 
         fig = plt.figure()     
          
-        dico={0:"y",1:"b",2:"r",3:"c",4:"m",5:"g"}
         plt.axis('off')
         for j in range(0,int(np.size(Y[:,0])/3)): 
-            plt.plot(Y[j*3,:], Y[j*3+1,:],c=dico[j],linewidth='0.75')
+            plt.plot(Y[j*3,:], Y[j*3+1,:],linewidth='0.75')
         newWindow = tkinter.Toplevel(root)
         newWindow.title("New Window")
         newWindow.resizable(width=False,height=False)
