@@ -52,12 +52,11 @@ def adaptive_rkf45(y, t0, tf, N, nb_corps, M):
         ya=y+np.array(h*(37*k1/378+250*k3/621+125*k4/594+512*k6/1771))
         yb=y+np.array(h*(2825*k1/27648+18575*k3/48384+13525*k4/55296+277*k5/14336+k6/4))
         ErreurActuel=np.linalg.norm(np.abs(ya-yb))
-        if (ErreurAdmis>=ErreurActuel):
-            alpha=0.2
-        else:
-            alpha=0.25
-        h=h*(ErreurAdmis/ErreurActuel)**alpha
-        for j in range(0,nb_corps) :
+        if (ErreurAdmis<=ErreurActuel):
+            h=h*(ErreurAdmis/ErreurActuel)**0.2
+        if (ErreurAdmis>ErreurActuel and ErreurActuel>0.0):
+            h=h*(ErreurAdmis/ErreurActuel)**0.25
+        for j in range(0,nb_corps):
             Y[j*3:(j+1)*3,i]=yb[j*3:(j+1)*3,0] 
         y=yb        
     return Y
