@@ -1,4 +1,18 @@
 # N objects trajectory calculator (Sandbox ; Raw inputs)
+    ┌──┐ 
+    │  │ ┌─────────────┐
+    │  │ │  ┌───────┐  │
+    │  │ │  │  xxxx │  │     xx          xxxx
+    │  │ │  │ x     │  │    xxx         xx  xx
+    │  │ │  │x      │  │   xx x         x    x
+    │  │ │  │x      │  │  xx  x         x    x
+    │  │ │  │x      │  │      x         x    x
+    │  │ │  │ x     │  │      x    xx   xx  xx
+    │  │ │  │  xxxx │  │    xxxx         xxxx
+    │  │ │  └───────┘  │
+    │  │ └─────────────┘
+    │  └─────────────────┐
+    └────────────────────┘
 
 ## HOW TO USE ? (SANDBOX mode)
 
